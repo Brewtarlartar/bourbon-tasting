@@ -440,46 +440,6 @@
             transition: width 0.3s ease;
         }
         
-        /* Side Navigation Arrows - VISIBLE */
-        .side-nav {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 50px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(201, 169, 98, 0.15);
-            border: 2px solid rgba(201, 169, 98, 0.3);
-            color: var(--accent-gold);
-            font-size: 28px;
-            z-index: 999;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .side-nav:active {
-            background: rgba(201, 169, 98, 0.3);
-            transform: translateY(-50%) scale(0.95);
-        }
-        
-        .side-nav.left {
-            left: 0;
-            border-left: none;
-            border-radius: 0 10px 10px 0;
-        }
-        
-        .side-nav.right {
-            right: 0;
-            border-right: none;
-            border-radius: 10px 0 0 10px;
-        }
-        
-        .side-nav:disabled {
-            opacity: 0.2;
-            cursor: not-allowed;
-        }
         
         @media (min-width: 768px) {
             .slide {
@@ -500,10 +460,6 @@
 <body>
     <!-- Progress Bar -->
     <div class="progress-bar" id="progressBar"></div>
-    
-    <!-- Side Navigation Arrows -->
-    <button class="side-nav left" id="leftArrow" onclick="changeSlide(-1)">‹</button>
-    <button class="side-nav right" id="rightArrow" onclick="changeSlide(1)">›</button>
     
     <!-- Slides Container -->
     <div class="slides-container" id="slidesContainer">
@@ -1077,8 +1033,6 @@
             // Update button states
             document.getElementById('prevBtn').disabled = index === 0;
             document.getElementById('nextBtn').disabled = index === totalSlides - 1;
-            document.getElementById('leftArrow').disabled = index === 0;
-            document.getElementById('rightArrow').disabled = index === totalSlides - 1;
             
             // Scroll to top of slide
             slides[index].scrollTop = 0;
