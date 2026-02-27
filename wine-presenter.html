@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Wine Tasting — Presenter Deck | Wandering Spirits</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #1a1117;
+            --primary-black: #0d090b;
+            --accent-burgundy: #8B2252;
+            --accent-wine: #722F37;
+            --accent-gold: #C9A962;
+            --text-light: #f5f0e8;
+            --text-muted: #a89f94;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
+            background: var(--primary-black);
+            color: var(--text-light);
+        }
+
+        .slides-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 100px 140px;
+            background: linear-gradient(145deg, var(--primary-dark) 0%, var(--primary-black) 50%, #0f0a0d 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            overflow-y: auto;
+        }
+
+        .slide.active { display: flex; opacity: 1; }
+
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-wine) 0%, var(--accent-burgundy) 50%, var(--accent-gold) 100%);
+        }
+
+        .slide::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-burgundy), transparent);
+        }
+
+        .corner-decor {
+            position: absolute;
+            width: 80px; height: 80px;
+            opacity: 0.3;
+        }
+        .corner-decor.top-left { top: 30px; left: 30px; border-top: 2px solid var(--accent-burgundy); border-left: 2px solid var(--accent-burgundy); }
+        .corner-decor.top-right { top: 30px; right: 30px; border-top: 2px solid var(--accent-burgundy); border-right: 2px solid var(--accent-burgundy); }
+        .corner-decor.bottom-left { bottom: 120px; left: 30px; border-bottom: 2px solid var(--accent-burgundy); border-left: 2px solid var(--accent-burgundy); }
+        .corner-decor.bottom-right { bottom: 120px; right: 30px; border-bottom: 2px solid var(--accent-burgundy); border-right: 2px solid var(--accent-burgundy); }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(48px, 6vw, 80px);
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            color: var(--text-light);
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(36px, 4vw, 56px);
+            font-weight: 500;
+            margin-bottom: 40px;
+            color: var(--text-light);
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px; left: 0;
+            width: 80px; height: 3px;
+            background: var(--accent-burgundy);
+        }
+
+        h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(24px, 3vw, 38px);
+            font-weight: 500;
+            margin-bottom: 20px;
+            margin-top: 30px;
+            color: var(--accent-burgundy);
+        }
+
+        h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(18px, 2vw, 26px);
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        p {
+            font-size: clamp(16px, 1.8vw, 24px);
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-weight: 300;
+        }
+
+        ul { list-style: none; margin: 20px 0; }
+
+        li {
+            font-size: clamp(16px, 1.6vw, 22px);
+            line-height: 1.9;
+            margin-bottom: 14px;
+            padding-left: 35px;
+            position: relative;
+            color: var(--text-light);
+            font-weight: 300;
+        }
+
+        li::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 12px;
+            width: 8px; height: 8px;
+            background: var(--accent-burgundy);
+            border-radius: 50%;
+        }
+
+        strong { color: var(--accent-gold); font-weight: 500; }
+
+        .ph {
+            color: var(--accent-gold);
+            font-style: normal;
+            font-weight: 400;
+            font-size: 0.8em;
+            opacity: 0.65;
+            white-space: nowrap;
+        }
+
+        .subtitle {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(18px, 2vw, 28px);
+            color: var(--text-muted);
+            font-weight: 300;
+            font-style: italic;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(24px, 3vw, 42px);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--accent-burgundy);
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .website {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(16px, 1.5vw, 22px);
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            margin-top: 40px;
+        }
+
+        .center-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin-top: 30px;
+        }
+
+        .wine-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .wine-name {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(42px, 5vw, 70px);
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .wine-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-burgundy), var(--accent-wine));
+            color: var(--text-light);
+            padding: 10px 25px;
+            font-size: clamp(14px, 1.5vw, 20px);
+            font-weight: 600;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .wine-badge.white {
+            background: linear-gradient(135deg, #C9A962, #A8893A);
+            color: var(--primary-black);
+        }
+
+        .tasting-box {
+            background: rgba(139, 34, 82, 0.08);
+            border-left: 4px solid var(--accent-burgundy);
+            padding: 25px 35px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tasting-box h4 { margin-bottom: 10px; font-size: clamp(14px, 1.4vw, 18px); }
+        .tasting-box p { margin-bottom: 0; font-size: clamp(15px, 1.5vw, 20px); }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(139, 34, 82, 0.1), rgba(114, 47, 55, 0.05));
+            border: 1px solid rgba(139, 34, 82, 0.3);
+            padding: 30px 40px;
+            margin: 25px 0;
+            border-radius: 10px;
+        }
+        .highlight-box h3 { margin-top: 0; }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 15px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 8px;
+            width: 12px; height: 12px;
+            background: var(--accent-burgundy);
+            border-radius: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px; top: 24px;
+            width: 2px; height: calc(100% + 10px);
+            background: rgba(139, 34, 82, 0.3);
+        }
+
+        .timeline-item:last-child::after { display: none; }
+
+        .timeline-year {
+            font-weight: 600;
+            color: var(--accent-burgundy);
+            margin-right: 15px;
+            min-width: 110px;
+        }
+
+        .quote {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(20px, 2.2vw, 30px);
+            color: var(--text-muted);
+            border-left: 3px solid var(--accent-burgundy);
+            padding-left: 30px;
+            margin: 40px 0;
+        }
+
+        .nav-controls {
+            position: fixed;
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 1000;
+            background: rgba(13, 9, 11, 0.9);
+            padding: 12px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(139, 34, 82, 0.3);
+        }
+
+        .nav-btn {
+            width: 45px; height: 45px;
+            border: 2px solid var(--accent-burgundy);
+            background: transparent;
+            color: var(--accent-burgundy);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 20px;
+        }
+
+        .nav-btn:hover { background: var(--accent-burgundy); color: var(--text-light); }
+        .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .slide-counter {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            color: var(--text-muted);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .slide-counter .current { color: var(--accent-burgundy); font-weight: 600; }
+
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: var(--accent-burgundy);
+            z-index: 1001;
+            transition: width 0.3s ease;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .comparison-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(139, 34, 82, 0.2);
+            padding: 25px;
+            border-radius: 10px;
+        }
+
+        .comparison-card h4 {
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(139, 34, 82, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .comparison-card p { font-size: clamp(14px, 1.4vw, 18px); margin-bottom: 8px; }
+
+        .order-list { counter-reset: order; }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(139, 34, 82, 0.15);
+            padding: 20px 30px;
+            margin: 15px 0;
+            border-radius: 10px;
+            counter-increment: order;
+        }
+
+        .order-item::before {
+            content: counter(order);
+            width: 50px; height: 50px;
+            background: linear-gradient(135deg, var(--accent-burgundy), var(--accent-wine));
+            color: var(--text-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+            margin-right: 25px;
+            flex-shrink: 0;
+        }
+
+        .order-content h4 { margin-bottom: 5px; }
+        .order-content p { margin-bottom: 0; font-size: clamp(14px, 1.4vw, 18px); color: var(--text-muted); }
+
+        .talking-point {
+            background: rgba(201, 169, 98, 0.06);
+            border: 1px dashed rgba(201, 169, 98, 0.3);
+            padding: 20px 25px;
+            margin: 15px 0;
+            border-radius: 8px;
+            font-size: clamp(14px, 1.4vw, 18px);
+            color: var(--text-muted);
+        }
+
+        .talking-point::before {
+            content: 'TALKING POINT';
+            display: block;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+            opacity: 0.7;
+        }
+
+        .swipe-hint {
+            display: none;
+            position: fixed;
+            bottom: 90px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(139, 34, 82, 0.9);
+            color: var(--text-light);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1000;
+            animation: fadeOut 3s forwards;
+        }
+
+        @keyframes fadeOut {
+            0%, 70% { opacity: 1; }
+            100% { opacity: 0; pointer-events: none; }
+        }
+
+        @media (max-width: 1200px) {
+            .slide { padding: 50px 60px 140px; }
+            .two-col { gap: 40px; }
+        }
+
+        @media (max-width: 900px) {
+            .slide { padding: 40px 40px 140px 40px; }
+            .two-col { grid-template-columns: 1fr; gap: 30px; }
+            .comparison-grid { grid-template-columns: 1fr !important; }
+            .wine-header { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .corner-decor { width: 40px; height: 40px; }
+            .swipe-hint { display: block; }
+        }
+
+        @media (max-width: 600px) {
+            .slide {
+                padding: 25px 20px 140px 20px;
+                justify-content: flex-start;
+                padding-top: 40px;
+            }
+            h1 { font-size: 32px !important; letter-spacing: 1px; }
+            h2 { font-size: 26px !important; margin-bottom: 25px; }
+            h3 { font-size: 20px !important; }
+            h4 { font-size: 16px !important; }
+            p, li { font-size: 15px !important; line-height: 1.6; }
+            .brand-name { font-size: 22px !important; letter-spacing: 3px; }
+            .subtitle { font-size: 16px !important; }
+            .wine-name { font-size: 28px !important; }
+            .wine-badge { font-size: 12px !important; padding: 6px 14px; }
+            .tasting-box { padding: 15px 20px; margin: 12px 0; }
+            .highlight-box { padding: 20px; }
+            .order-item { padding: 15px 20px; margin: 10px 0; }
+            .order-item::before { width: 40px; height: 40px; font-size: 18px; margin-right: 15px; }
+            .timeline-item { padding-left: 20px; flex-direction: column; gap: 5px; }
+            .timeline-year { min-width: auto; }
+            .quote { font-size: 16px !important; padding-left: 20px; margin: 25px 0; }
+            .corner-decor { display: none; }
+            .nav-controls { padding: 10px 20px; gap: 15px; }
+            .nav-btn { width: 50px; height: 50px; }
+            .two-col { gap: 20px; }
+            .comparison-card { padding: 15px; }
+        }
+
+        .slides-container { touch-action: manipulation; -webkit-user-select: none; user-select: none; }
+
+        @media print {
+            .nav-controls, .progress-bar { display: none !important; }
+            .slide {
+                page-break-after: always;
+                position: relative !important;
+                display: flex !important;
+                opacity: 1 !important;
+                height: auto; min-height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+
+    <div class="slides-container" id="slidesContainer">
+
+        <!-- SLIDE 1: Title -->
+        <div class="slide active center-content">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <div class="brand-name">Wandering Spirits</div>
+            <div class="subtitle" style="margin-bottom: 40px;">Mobile Bar &mdash; Presenter Deck</div>
+            <h1>Wine Tasting<br>Experience</h1>
+            <p class="subtitle" style="margin-top: 30px;">A Journey Through Four Exceptional Wines &amp; the History of the Grape</p>
+            <p class="website">wanderingspiritsmb.com</p>
+        </div>
+
+        <!-- SLIDE 2: Tasting Order -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Tonight's Tasting Order</h2>
+            <p class="subtitle" style="margin-bottom: 30px;">Lightest to Boldest</p>
+            <div class="order-list">
+                <div class="order-item">
+                    <div class="order-content">
+                        <h4>Sauvignon Blanc</h4>
+                        <p>New Zealand &bull; Crisp, aromatic, electric with acidity&mdash;the perfect opener</p>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-content">
+                        <h4>Chardonnay</h4>
+                        <p>Italy &bull; Elegant and round, a fuller-bodied white to bridge into reds</p>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-content">
+                        <h4>Pinot Noir</h4>
+                        <p>Monterey, California &bull; Silky and graceful, the lightest of the reds</p>
+                    </div>
+                </div>
+                <div class="order-item">
+                    <div class="order-content">
+                        <h4>Primitivo</h4>
+                        <p>Italy &bull; Bold and jammy with rich fruit&mdash;the grand finale</p>
+                    </div>
+                </div>
+            </div>
+            <div class="talking-point">Explain why we go light to bold: heavier wines would overpower the palate and make lighter wines taste flat afterward. Same logic applies to food courses&mdash;salad before steak.</div>
+        </div>
+
+        <!-- SLIDE 3: Tasting Tips -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Wine Tasting Tips</h2>
+            <div class="two-col">
+                <div>
+                    <ul>
+                        <li><strong>Hold by the Stem:</strong> Your hand warms the wine&mdash;keep the bowl cool</li>
+                        <li><strong>Swirl Gently:</strong> Opens up aromas by exposing wine to oxygen</li>
+                        <li><strong>Look First:</strong> Tilt glass against a white background to observe color</li>
+                        <li><strong>Cleanse Between Wines:</strong> Water and plain crackers reset your palate</li>
+                    </ul>
+                </div>
+                <div>
+                    <ul>
+                        <li><strong>Smell Before Sipping:</strong> 80% of what we "taste" is actually aroma</li>
+                        <li><strong>Small Sips:</strong> Let wine coat your tongue&mdash;front, sides, and back</li>
+                        <li><strong>Whites First:</strong> Always taste lightest to boldest</li>
+                        <li><strong>No Wrong Answers:</strong> Your palate is unique&mdash;trust what you taste</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="quote" style="margin-top: 40px;">
+                "Wine is one of the most civilized things in the world."
+                <span style="display: block; font-size: 0.7em; margin-top: 10px; font-style: normal;">&mdash; Ernest Hemingway</span>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: Welcome -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Welcome</h2>
+            <p style="font-size: clamp(20px, 2.2vw, 28px); margin-bottom: 40px;">
+                Thank you for joining us for this curated wine tasting experience.
+            </p>
+            <h3>Tonight's Journey</h3>
+            <ul>
+                <li>Explore four wines spanning two continents and four grape varieties</li>
+                <li>Discover the ancient history of wine&mdash;from 6000 BC to your glass</li>
+                <li>Learn why wine has different colors and how grapes become wine</li>
+                <li>Understand the unique story behind each grape in your glass</li>
+            </ul>
+            <div class="quote">
+                Featuring: Sauvignon Blanc (NZ), Chardonnay (Italy), Pinot Noir (Monterey), and Primitivo (Italy)
+            </div>
+        </div>
+
+        <!-- SLIDE 5: Ancient History of Wine Part 1 -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Wine: The Oldest Drink</h2>
+            <p style="margin-bottom: 25px;">Wine is among the oldest beverages ever created. Its story stretches back over 8,000 years&mdash;predating the wheel, writing, and even bread.</p>
+            <div class="timeline-item">
+                <span class="timeline-year">~6000 BC</span>
+                <span>Earliest evidence of winemaking discovered in the Caucasus (modern Georgia). Clay vessels called <em>qvevri</em> <span class="ph">(KWEV-ree)</span> held fermented grape juice. Georgia still uses this method today&mdash;it's UNESCO-protected.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">~3100 BC</span>
+                <span>Ancient Egyptians cultivate vineyards along the Nile Delta. Wine becomes the drink of pharaohs&mdash;jars of wine were placed in tombs for the afterlife. King Tut was buried with 26 jars.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">~800 BC</span>
+                <span>Ancient Greeks spread viticulture across the Mediterranean. Dionysus <span class="ph">(dy-oh-NY-sus)</span> becomes the god of wine. The Greeks plant vines in southern Italy&mdash;calling it <em>Oenotria</em> <span class="ph">(ee-NOH-tree-ah)</span>, "the land of wine."</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">~100 BC</span>
+                <span>The Roman Empire industrializes wine. They plant vineyards across France, Spain, and Germany. Roman soldiers received wine rations daily&mdash;about a liter per person.</span>
+            </div>
+            <div class="talking-point">Italy was literally named "the land of wine" by the Greeks. Wine is in Italy's DNA&mdash;so it's fitting that two of tonight's wines come from there.</div>
+        </div>
+
+        <!-- SLIDE 6: Wine History Part 2 (Medieval to Modern) -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>From Monks to the Modern World</h2>
+            <div class="timeline-item">
+                <span class="timeline-year">500&ndash;1500 AD</span>
+                <span>After Rome falls, Catholic monks preserve winemaking. Benedictine <span class="ph">(ben-eh-DIK-tin)</span> and Cistercian <span class="ph">(sis-TER-shun)</span> monasteries in Burgundy and Champagne perfect viticulture <span class="ph">(VIT-ih-kul-chur) &mdash; grape growing</span>, mapping the first <em>terroir</em> <span class="ph">(tehr-WAHR)</span>&mdash;the idea that soil, slope, and climate shape wine's character.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1600s&ndash;1700s</span>
+                <span>Glass bottles and cork stoppers are invented, allowing wine to age for the first time. Dom P&eacute;rignon <span class="ph">(dom pehr-een-YON) &mdash; Benedictine monk</span> pioneers Champagne. Wine becomes a global trade commodity.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1860s</span>
+                <span>The Great Wine Blight: the phylloxera <span class="ph">(fil-LOX-er-ah)</span> louse, accidentally brought from America, devastates nearly every vineyard in Europe&mdash;destroying 70% of France's vines. The solution? Grafting European vines onto resistant American rootstock. Almost every vine in the world today grows on American roots.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1976</span>
+                <span>The "Judgment of Paris": California wines beat France's best in a blind tasting, shocking the world and proving great wine can come from anywhere.</span>
+            </div>
+            <div class="talking-point">The phylloxera story is wild&mdash;America nearly destroyed all European wine, then saved it. And the Judgment of Paris is like a Cinderella story: nobody expected California to win, not even the Californians.</div>
+        </div>
+
+        <!-- SLIDE 7: Terroir & Old World vs New World -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Old World vs. New World</h2>
+            <div class="two-col">
+                <div>
+                    <h3 style="margin-top: 0;">Old World</h3>
+                    <p><strong>Europe:</strong> France, Italy, Spain, Germany</p>
+                    <ul>
+                        <li>Named by <strong>region</strong> (Chianti, Burgundy, Champagne)&mdash;not by grape</li>
+                        <li>Emphasis on <strong>terroir</strong>&mdash;the land speaks through the wine</li>
+                        <li>Tradition and strict regulations govern production</li>
+                        <li>Tend toward <strong>subtlety, earthiness, and restraint</strong></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="margin-top: 0;">New World</h3>
+                    <p><strong>Americas, Australia, NZ, South Africa</strong></p>
+                    <ul>
+                        <li>Named by <strong>grape variety</strong> (Pinot Noir, Chardonnay)</li>
+                        <li>Emphasis on <strong>the winemaker's vision</strong> and innovation</li>
+                        <li>Fewer regulations, more experimentation</li>
+                        <li>Tend toward <strong>bolder fruit, riper flavors</strong></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top: 25px;">
+                <p style="margin-bottom: 0;"><strong>Tonight's lineup bridges both worlds:</strong> Two Italian wines (Old World tradition), one New Zealand (New World innovation), and one Californian (New World terroir focus). You'll taste the difference in philosophy.</p>
+            </div>
+            <div class="talking-point">Ask the group: "When you pick up a bottle of Italian wine, you'll see a region name like 'Puglia' or 'Trentino.' A New Zealand bottle says 'Sauvignon Blanc' front and center. Same wine, different storytelling."</div>
+        </div>
+
+        <!-- SLIDE 8: Why Wine Has Color -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Why Is Red Wine Red?</h2>
+            <p class="subtitle" style="margin-bottom: 20px;">The Science of Wine Color</p>
+            <div class="two-col">
+                <div>
+                    <h3 style="margin-top: 0;">The Secret Is in the Skin</h3>
+                    <p>Nearly all grape juice is clear or pale green&mdash;even from red grapes. If you squeeze a red grape, the juice inside is white.</p>
+                    <p>Color comes from <strong>anthocyanins</strong> <span class="ph">(an-tho-SY-uh-ninz)</span>&mdash;pigment molecules in grape skins. The longer juice stays in contact with skins during fermentation (<strong>maceration</strong> <span class="ph">(mass-er-AY-shun)</span>), the deeper the color.</p>
+                    <ul>
+                        <li><strong>White wine:</strong> Juice pressed off skins immediately&mdash;no color</li>
+                        <li><strong>Ros&eacute;:</strong> Brief skin contact (hours to a day)&mdash;just a blush</li>
+                        <li><strong>Red wine:</strong> Days to weeks of skin contact&mdash;deep ruby to garnet</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 style="margin-top: 0;">What Else the Skin Gives</h3>
+                    <p>Skin contact provides more than color:</p>
+                    <ul>
+                        <li><strong>Tannins:</strong> That dry, gripping sensation. Comes from skins, seeds, and stems. Gives red wine its structure and aging potential.</li>
+                        <li><strong>Body &amp; texture:</strong> More skin contact = fuller, richer wine</li>
+                        <li><strong>Flavor compounds:</strong> Many complex flavors are extracted during maceration</li>
+                    </ul>
+                    <div class="highlight-box" style="margin-top: 15px;">
+                        <p style="margin-bottom: 0;"><strong>Fun Fact:</strong> You can make white wine from red grapes! Champagne often includes Pinot Noir, pressed quickly to avoid color. It's called <em>Blanc de Noirs</em> <span class="ph">(blahnk duh NWAHR)</span>&mdash;"white from blacks."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="talking-point">Demo idea: if possible, show a red grape and squeeze it&mdash;the juice really is clear/white. It's a great visual. Also point to the Pinot Noir glass later and note how you can almost see through it (thin skins) vs. the Primitivo which is nearly opaque (thick skins).</div>
+        </div>
+
+        <!-- SLIDE 9: How Wine Is Made -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>From Vine to Glass</h2>
+            <p class="subtitle" style="margin-bottom: 20px;">How Wine Is Made</p>
+            <div class="two-col">
+                <div>
+                    <h4>1. Harvest</h4>
+                    <p>Grapes are picked at peak ripeness&mdash;timing is everything. Too early: tart and thin. Too late: flabby and over-sweet. In cooler regions (like NZ), harvest is March&ndash;April. In the Northern Hemisphere, it's August&ndash;October.</p>
+                    <h4>2. Crushing &amp; Pressing</h4>
+                    <p>Grapes are gently crushed. For whites, juice separates from skins immediately. For reds, skins stay in for color and tannin extraction.</p>
+                    <h4>3. Fermentation</h4>
+                    <p>Yeast converts grape sugar into alcohol and CO&#8322;. Takes 1&ndash;4 weeks. Cool fermentation (whites) preserves freshness; warmer fermentation (reds) extracts more color and flavor.</p>
+                </div>
+                <div>
+                    <h4>4. Aging</h4>
+                    <p><strong>Stainless steel:</strong> Preserves bright fruit and acidity. Typical for Sauvignon Blanc&mdash;clean and crisp. <strong>Oak barrels:</strong> Add vanilla, spice, toast, butter (via malolactic <span class="ph">(mal-oh-LAK-tik) &mdash; secondary fermentation</span>). Classic for oaked Chardonnay. <strong>Time:</strong> A few months to several years depending on style.</p>
+                    <h4>5. Bottling</h4>
+                    <p>Wine may be filtered and fined (clarified), then bottled. Some wines improve further in the bottle&mdash;reds more so than whites.</p>
+                    <div class="highlight-box" style="margin-top: 15px;">
+                        <p style="margin-bottom: 0;"><strong>Malolactic Fermentation:</strong> A secondary fermentation that converts sharp malic acid (green apple) into softer lactic acid (cream). This is what gives buttery Chardonnays their richness. Our Italian Chardonnay may or may not use this.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 10: The Art of Tasting -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>The Art of Wine Tasting</h2>
+            <div class="two-col">
+                <div>
+                    <h4>1. See</h4>
+                    <p>Tilt the glass against a white background. Color tells the story before you smell it&mdash;pale gold (young Chardonnay), translucent ruby (Pinot Noir), deep garnet (Primitivo).</p>
+                    <h4>2. Swirl &amp; Smell</h4>
+                    <p>Swirling releases volatile aromatics. Dip your nose into the glass. First impressions: fruit? Flowers? Earth? Spice? The more you swirl, the more layers appear.</p>
+                </div>
+                <div>
+                    <h4>3. Sip &amp; Taste</h4>
+                    <p>Take a small sip and draw air across the wine (gentle slurp). Notice sweetness (tip of tongue), acidity (sides), bitterness (back), tannin (gums and cheeks). The "mid-palate" is where complexity lives.</p>
+                    <h4>4. Savor the Finish</h4>
+                    <p>After swallowing, notice how long flavors linger. A 10-second finish is average; a 30+ second finish is exceptional. Does it evolve? Change? Leave you wanting more?</p>
+                </div>
+            </div>
+            <div class="highlight-box" style="margin-top: 30px;">
+                <p style="margin-bottom: 0;"><strong>Pro Tip:</strong> There are no wrong answers. If you smell "grandma's kitchen" or "rainy day" instead of "blackcurrant" or "toast"&mdash;that's valid. Wine aromas trigger personal memories. Professional descriptors are just a shared language.</p>
+            </div>
+        </div>
+
+        <!-- ====================== -->
+        <!-- SAUVIGNON BLANC SECTION -->
+        <!-- ====================== -->
+
+        <!-- SLIDE 11: Sauvignon Blanc Intro -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <div class="wine-header">
+                <span class="wine-name">Sauvignon Blanc</span>
+                <span class="wine-badge white">White Wine</span>
+            </div>
+            <p class="subtitle">New Zealand</p>
+            <p style="font-size: clamp(18px, 2vw, 26px); margin: 30px 0;">
+                Electric, vibrant, and unmistakable&mdash;New Zealand Sauvignon Blanc changed the wine world and put an entire country on the map.
+            </p>
+            <div class="two-col" style="margin-top: 20px;">
+                <div>
+                    <h4>Quick Facts</h4>
+                    <ul>
+                        <li><strong>Grape:</strong> Sauvignon Blanc</li>
+                        <li><strong>Origin of Grape:</strong> Loire Valley &amp; Bordeaux, France</li>
+                        <li><strong>This Wine:</strong> New Zealand</li>
+                        <li><strong>Style:</strong> Crisp, aromatic, high acidity</li>
+                        <li><strong>Fermentation:</strong> Stainless steel (unoaked)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>What Makes It Special</h4>
+                    <div class="highlight-box" style="margin: 0;">
+                        <p style="margin-bottom: 0; font-size: clamp(16px, 1.8vw, 22px);">
+                            New Zealand's cool climate and intense UV light (thinner ozone layer in the Southern Hemisphere) produce Sauvignon Blancs with explosive aromatics unlike anywhere else on earth.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 12: Sauvignon Blanc Grape History -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>The "Wild White" Grape</h2>
+            <p style="margin-bottom: 25px;">The name <em>Sauvignon</em> comes from the French word <strong><em>sauvage</em></strong>&mdash;"wild." It grew wild in the hedgerows of southwestern France for centuries before being cultivated.</p>
+            <div class="timeline-item">
+                <span class="timeline-year">1500s&ndash;1600s</span>
+                <span>First documented in the Loire Valley. It thrives in Sancerre <span class="ph">(sahn-SAIR) &mdash; Loire region</span> and Pouilly-Fum&eacute; <span class="ph">(pwee-YEE foo-MAY) &mdash; Loire region</span>, becoming France's signature aromatic white grape.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1800s</span>
+                <span>In Bordeaux, Sauvignon Blanc crosses naturally with Cabernet Franc to create <strong>Cabernet Sauvignon</strong>&mdash;the world's most planted red grape. Sauvignon Blanc is literally the parent of Cabernet.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1973</span>
+                <span>The first Sauvignon Blanc vines are planted in Marlborough, New Zealand. The wine world doesn't notice&mdash;yet.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1985</span>
+                <span>Cloudy Bay releases their first Marlborough Sauvignon Blanc. It becomes a sensation overnight&mdash;a style the world had never tasted. Explosive tropical fruit, lime, and herbaceous notes.</span>
+            </div>
+            <div class="highlight-box" style="margin-top: 20px;">
+                <p style="margin-bottom: 0;"><strong>The Flavor Science:</strong> The "grassy" and "tropical" aromas come from volatile thiol <span class="ph">(THY-ol) &mdash; aroma molecule</span> compounds (3MH and 3MHA). NZ's UV light and cool nights concentrate these compounds to extraordinary levels. French versions are more mineral and restrained; NZ versions are a flavor explosion.</p>
+            </div>
+        </div>
+
+        <!-- SLIDE 13: NZ's Wine Revolution -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>New Zealand's Wine Revolution</h2>
+            <div class="two-col">
+                <div>
+                    <h3 style="margin-top: 0;">Why Marlborough?</h3>
+                    <p><strong>Geography:</strong> At the northern tip of the South Island, Marlborough is a narrow valley between mountain ranges. Cool maritime winds funnel through, keeping temperatures low.</p>
+                    <p><strong>Sunlight:</strong> Long growing season with intense UV (up to 40% more than France). Grapes develop thick skins rich in aromatic compounds as a natural defense.</p>
+                    <p><strong>The Result:</strong> Wines with piercing acidity, explosive fruit, and incredible aromatic intensity that cannot be replicated anywhere else.</p>
+                </div>
+                <div>
+                    <h3 style="margin-top: 0;">The Numbers</h3>
+                    <ul>
+                        <li><strong>1973:</strong> First vines planted in Marlborough</li>
+                        <li><strong>Today:</strong> 86% of NZ wine is Sauvignon Blanc</li>
+                        <li><strong>NZ is 6th</strong> largest wine exporter in the world by value</li>
+                        <li>NZ Sauvignon Blanc outsells French Sancerre globally by <strong>10 to 1</strong></li>
+                    </ul>
+                    <div class="highlight-box" style="margin-top: 15px;">
+                        <p style="margin-bottom: 0;"><strong>Record Speed:</strong> NZ went from zero wine reputation to global powerhouse in under 40 years&mdash;faster than any wine region in history.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="talking-point">This is a great moment to pour the Sauvignon Blanc. Ask everyone to look at the color first (very pale, green-tinged), then smell before sipping. The aromatics should be immediately explosive.</div>
+        </div>
+
+        <!-- SLIDE 14: Sauvignon Blanc Tasting Notes -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Sauvignon Blanc: Tasting Notes</h2>
+            <div class="tasting-box">
+                <h4>Appearance</h4>
+                <p>Pale straw to light gold with green-tinged highlights&mdash;brilliant clarity</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Nose</h4>
+                <p>Explosive aromas of passion fruit, grapefruit, lime zest, fresh-cut grass, gooseberry, and a hint of jalape&ntilde;o</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Palate</h4>
+                <p>Racy acidity, zesty citrus, tropical fruit, green herbs, mineral finish. Refreshing and electric.</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Finish</h4>
+                <p>Crisp, clean, and refreshing with a lingering citrus zing</p>
+            </div>
+            <p style="margin-top: 20px; color: var(--text-muted);">
+                <strong>Pairing Ideas:</strong> Goat cheese, sushi, ceviche, grilled shrimp, salads with citrus vinaigrette, Thai cuisine, oysters
+            </p>
+            <div class="talking-point">Ask the group what they smell&mdash;people often pick up on the grass, the tropical fruit, or sometimes the herbaceous/green pepper note. All valid! The jalape&ntilde;o note (methoxypyrazines <span class="ph">(meth-OX-ee-PEER-ah-zeens) &mdash; aroma compounds</span>) is a signature of Sauvignon Blanc.</div>
+        </div>
+
+        <!-- =================== -->
+        <!-- CHARDONNAY SECTION -->
+        <!-- =================== -->
+
+        <!-- SLIDE 15: Chardonnay Intro -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <div class="wine-header">
+                <span class="wine-name">Chardonnay</span>
+                <span class="wine-badge white">White Wine</span>
+            </div>
+            <p class="subtitle">Italy</p>
+            <p style="font-size: clamp(18px, 2vw, 26px); margin: 30px 0;">
+                The world's most popular white grape&mdash;a chameleon that reflects its winemaker and its home more than any other variety.
+            </p>
+            <div class="two-col" style="margin-top: 20px;">
+                <div>
+                    <h4>Quick Facts</h4>
+                    <ul>
+                        <li><strong>Grape:</strong> Chardonnay</li>
+                        <li><strong>Origin:</strong> Burgundy, France</li>
+                        <li><strong>This Wine:</strong> Italy</li>
+                        <li><strong>Style:</strong> Elegant, medium-bodied</li>
+                        <li><strong>Rank:</strong> Most planted white grape on earth</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>The Chameleon Grape</h4>
+                    <div class="highlight-box" style="margin: 0;">
+                        <p style="margin-bottom: 0; font-size: clamp(16px, 1.8vw, 22px);">
+                            Chardonnay has a relatively neutral flavor profile, making it a blank canvas. Oak gives it richness and butter. Steel keeps it crisp and bright. The winemaker's decisions matter more than almost any other grape.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 16: Chardonnay Grape History -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>The Queen of White Grapes</h2>
+            <p style="margin-bottom: 25px;">Chardonnay's homeland is Burgundy, France, where it produces some of the most expensive white wines on earth&mdash;think Montrachet <span class="ph">(mohn-rah-SHAY) &mdash; famous vineyard</span> ($300+/bottle) and Chablis <span class="ph">(shah-BLEE) &mdash; Burgundy region</span>.</p>
+            <div class="timeline-item">
+                <span class="timeline-year">Origins</span>
+                <span>DNA analysis revealed Chardonnay is a natural cross between <strong>Pinot Noir</strong> and <strong>Gouais Blanc</strong> <span class="ph">(GOO-ay BLAHNK)</span>&mdash;a humble, nearly extinct peasant grape. Royalty meets common folk in one vine.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">Medieval Era</span>
+                <span>Cistercian <span class="ph">(sis-TER-shun)</span> monks in Burgundy discover that Chardonnay expresses <em>terroir</em> <span class="ph">(tehr-WAHR)</span> like no other grape&mdash;the same variety tastes completely different from one vineyard to the next, even a few rows apart.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1980s&ndash;1990s</span>
+                <span>Heavily oaked, buttery California Chardonnay dominates. It becomes so popular that a backlash emerges: the "ABC" movement&mdash;<strong>Anything But Chardonnay</strong>.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">Today</span>
+                <span>The pendulum has swung back. Modern Chardonnays emphasize balance, minerality, and restraint. Italian and Burgundian styles lead this elegant renaissance.</span>
+            </div>
+            <div class="talking-point">The ABC movement is a fun anecdote&mdash;people got so sick of over-oaked, buttery Chardonnay in the '90s that they swore off the grape entirely. But the grape wasn't the problem; the winemaking was. Italian Chardonnay tends to be exactly what changed people's minds: fresh, balanced, not a butter bomb.</div>
+        </div>
+
+        <!-- SLIDE 17: Chardonnay Italian Style -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Chardonnay: The Italian Way</h2>
+            <div class="two-col">
+                <div>
+                    <h3 style="margin-top: 0;">Italian vs. Californian</h3>
+                    <p>When most Americans think "Chardonnay," they think of the rich, buttery California style&mdash;heavy oak, malolactic fermentation, golden color.</p>
+                    <p>Italian Chardonnay is a different animal. Grown primarily in the cooler north (Trentino-Alto Adige <span class="ph">(tren-TEE-no AHL-toe AH-dee-jay) &mdash; Alpine north</span>, Friuli <span class="ph">(free-OO-lee) &mdash; northeast Italy</span>, Veneto <span class="ph">(VEH-neh-toe) &mdash; Venice region</span>), it leans toward <strong>freshness, lemon zest, white flowers, and minerality</strong>.</p>
+                    <p>Less oak (or none). Less butter. More elegance. Think "silk scarf" instead of "fur coat."</p>
+                </div>
+                <div>
+                    <h3 style="margin-top: 0;">Why Italy Grows Chardonnay</h3>
+                    <p>Chardonnay has been in northern Italy since the 1800s. The cool Alpine foothills mirror Burgundy's climate&mdash;cold nights preserve acidity while warm days develop flavor.</p>
+                    <p>Italy's Chardonnays rarely get the spotlight because Italy has 500+ native grapes. But many sommeliers consider Italian Chardonnay some of the best-value whites in the world.</p>
+                    <div class="highlight-box" style="margin-top: 15px;">
+                        <p style="margin-bottom: 0;"><strong>Champagne Connection:</strong> Chardonnay is one of the three permitted grapes in Champagne (alongside Pinot Noir and Pinot Meunier <span class="ph">(mun-YAY) &mdash; Champagne grape</span>). A Champagne labeled <em>Blanc de Blancs</em> <span class="ph">(blahnk duh BLAHNK)</span> is 100% Chardonnay.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="talking-point">Great transition: "Now we're going to taste a Chardonnay that might change your mind about Chardonnay." Pour and ask people to compare the color to the Sauvignon Blanc&mdash;it should be slightly deeper gold.</div>
+        </div>
+
+        <!-- SLIDE 18: Chardonnay Tasting Notes -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Chardonnay: Tasting Notes</h2>
+            <div class="tasting-box">
+                <h4>Appearance</h4>
+                <p>Pale to medium gold&mdash;noticeably richer than the Sauvignon Blanc, reflecting more body and weight</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Nose</h4>
+                <p>Lemon, green apple, white peach, delicate white flowers, hints of almond, subtle mineral and stone</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Palate</h4>
+                <p>Medium-bodied with balanced acidity, citrus and stone fruit, subtle creaminess without heaviness, clean mineral finish</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Finish</h4>
+                <p>Elegant and lingering with notes of lemon peel and a whisper of toasted almond</p>
+            </div>
+            <p style="margin-top: 20px; color: var(--text-muted);">
+                <strong>Pairing Ideas:</strong> Roasted chicken, risotto, creamy pasta, mild fish, soft cheeses like brie, mushroom dishes, white pizza
+            </p>
+            <div class="talking-point">Compare directly to the Sauvignon Blanc: "Notice how this has more weight, more roundness? That's the Chardonnay's fuller body. But it's still fresh&mdash;not heavy or buttery like a California Chard. That's the Italian touch."</div>
+        </div>
+
+        <!-- =================== -->
+        <!-- PINOT NOIR SECTION  -->
+        <!-- =================== -->
+
+        <!-- SLIDE 19: Pinot Noir Intro -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <div class="wine-header">
+                <span class="wine-name">Pinot Noir</span>
+                <span class="wine-badge">Red Wine</span>
+            </div>
+            <p class="subtitle">Monterey, California</p>
+            <p style="font-size: clamp(18px, 2vw, 26px); margin: 30px 0;">
+                Called "the heartbreak grape" for its difficulty to grow, Pinot Noir rewards patience with wines of extraordinary elegance and complexity.
+            </p>
+            <div class="two-col" style="margin-top: 20px;">
+                <div>
+                    <h4>Quick Facts</h4>
+                    <ul>
+                        <li><strong>Grape:</strong> Pinot Noir</li>
+                        <li><strong>Origin of Grape:</strong> Burgundy, France</li>
+                        <li><strong>This Wine:</strong> Monterey County, California</li>
+                        <li><strong>Style:</strong> Light-to-medium body, silky tannins</li>
+                        <li><strong>Skin:</strong> Thin-skinned&mdash;lighter color than most reds</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Why Monterey?</h4>
+                    <div class="highlight-box" style="margin: 0;">
+                        <p style="margin-bottom: 0; font-size: clamp(16px, 1.8vw, 22px);">
+                            Monterey's long, cool growing season&mdash;Pacific Ocean fog funnels through the Salinas <span class="ph">(sah-LEE-nahs)</span> Valley&mdash;creates ideal conditions. Grapes ripen slowly, developing intense flavor while retaining bright acidity. It's one of the longest growing seasons in California.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 20: Pinot Noir Grape History -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>The Heartbreak Grape</h2>
+            <p style="margin-bottom: 25px;">Pinot Noir is one of the oldest cultivated grape varieties&mdash;and the most demanding. Winemakers call it "the heartbreak grape" because it is notoriously difficult to grow well.</p>
+            <div class="timeline-item">
+                <span class="timeline-year">~100 AD</span>
+                <span>Romans first document Pinot Noir in Burgundy. The name comes from French <strong><em>pin</em></strong> (pine)&mdash;its tight clusters resemble pinecones. One of the first grapes ever intentionally cultivated.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">Medieval Era</span>
+                <span>Cistercian and Benedictine monks elevate Pinot Noir to an art. They discover small soil differences produce dramatically different wines&mdash;the birth of Burgundy's <em>cru</em> <span class="ph">(KROO) &mdash; vineyard ranking</span> system. Some of these vineyard boundaries are still used 900 years later.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">The Challenge</span>
+                <span>Thin-skinned and genetically unstable, Pinot Noir is susceptible to frost, rot, mildew, and mutation. It demands cool climates, perfect drainage, and obsessive viticultural care. It punishes neglect.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">DNA Legacy</span>
+                <span>Pinot Noir is a parent grape of <strong>Chardonnay</strong>, <strong>Gamay</strong> (Beaujolais), and many others. It has over 1,000 known clonal variations&mdash;more than any other grape on earth.</span>
+            </div>
+            <div class="talking-point">Connect to the Chardonnay they just tasted: "Remember I said Chardonnay is a cross of Pinot Noir and Gouais Blanc <span class="ph">(GOO-ay BLAHNK)</span>? That means the white wine you just drank and the red you're about to taste are actually related. They're parent and child."</div>
+        </div>
+
+        <!-- SLIDE 21: Pinot Noir California & Monterey -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>California Pinot Noir</h2>
+            <div class="two-col">
+                <div>
+                    <h3 style="margin-top: 0;">The <em>Sideways</em> Effect</h3>
+                    <p>The 2004 film <em>Sideways</em> sparked a Pinot Noir boom&mdash;US sales surged 16% after its release. The character Miles delivered the famous line: <em>"I am NOT drinking any Merlot!"</em></p>
+                    <p>Merlot sales actually dropped 2% that year. Hollywood changed the American wine market overnight.</p>
+                    <p>California Pinot Noir is typically <strong>fruit-forward and approachable</strong> compared to Burgundy's earthier, more restrained style. Monterey sits between the two&mdash;fruit with elegance.</p>
+                </div>
+                <div>
+                    <h3 style="margin-top: 0;">The Monterey Terroir</h3>
+                    <p><strong>The Salinas Valley:</strong> This 100-mile-long valley acts as a natural wind tunnel, channeling cold Pacific air inland every afternoon. Morning sun + afternoon fog = perfect Pinot conditions.</p>
+                    <p><strong>Cool Climate Advantage:</strong> The lengthy growing season (one of the longest in California) means grapes hang on the vine longer, developing complex flavors while maintaining crisp acidity.</p>
+                    <ul>
+                        <li><strong>Soil:</strong> Limestone and sandy loam&mdash;excellent drainage</li>
+                        <li><strong>Avg. Temperature:</strong> Highs of 70&ndash;75&deg;F in growing season</li>
+                        <li><strong>Region II</strong> on the Winkler scale (same as Burgundy)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="talking-point">Pour the Pinot Noir. Ask everyone to hold it up to the light: "Notice how you can almost see through it? That transparency is because Pinot Noir has very thin skins&mdash;less pigment. Compare that to the Primitivo coming next, which will be nearly black."</div>
+        </div>
+
+        <!-- SLIDE 22: Pinot Noir Tasting Notes -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Pinot Noir: Tasting Notes</h2>
+            <div class="tasting-box">
+                <h4>Appearance</h4>
+                <p>Translucent ruby&mdash;you can almost see through it. Lighter than most reds due to Pinot Noir's thin skins and low anthocyanin <span class="ph">(an-tho-SY-uh-nin) &mdash; skin pigment</span> content.</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Nose</h4>
+                <p>Red cherry, raspberry, strawberry, subtle earthy notes, hints of mushroom, dried herbs, and a touch of baking spice</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Palate</h4>
+                <p>Silky texture, bright red fruit, balanced acidity, soft tannins, cola and spice undertones, elegant weight</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Finish</h4>
+                <p>Elegant and lingering with a delicate interplay of fruit, earth, and gentle spice</p>
+            </div>
+            <p style="margin-top: 20px; color: var(--text-muted);">
+                <strong>Pairing Ideas:</strong> Salmon, duck, roasted turkey, mushroom dishes, gruy&egrave;re <span class="ph">(groo-YAIR) &mdash; Swiss cheese</span>, charcuterie <span class="ph">(shar-KOO-tuh-ree) &mdash; cured meats</span>, lamb chops
+            </p>
+            <div class="talking-point">Ask: "What's the biggest difference you notice between this red and the whites?" Most people will say texture&mdash;the tannins create a drying sensation on the gums. That's the skin contact we talked about.</div>
+        </div>
+
+        <!-- =================== -->
+        <!-- PRIMITIVO SECTION   -->
+        <!-- =================== -->
+
+        <!-- SLIDE 23: Primitivo Intro -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <div class="wine-header">
+                <span class="wine-name">Primitivo</span>
+                <span class="wine-badge">Red Wine</span>
+            </div>
+            <p class="subtitle">Puglia <span class="ph">(POOL-yah)</span>, Italy</p>
+            <p style="font-size: clamp(18px, 2vw, 26px); margin: 30px 0;">
+                Italy's sun-drenched answer to bold, fruit-forward reds&mdash;and the genetic twin of California's Zinfandel.
+            </p>
+            <div class="two-col" style="margin-top: 20px;">
+                <div>
+                    <h4>Quick Facts</h4>
+                    <ul>
+                        <li><strong>Grape:</strong> Primitivo</li>
+                        <li><strong>Region:</strong> Puglia (the heel of Italy's boot)</li>
+                        <li><strong>Style:</strong> Full-bodied, rich, high alcohol</li>
+                        <li><strong>Alias:</strong> Genetically identical to Zinfandel</li>
+                        <li><strong>Character:</strong> Jammy, bold, warming</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>The Zinfandel Connection</h4>
+                    <div class="highlight-box" style="margin: 0;">
+                        <p style="margin-bottom: 0; font-size: clamp(16px, 1.8vw, 22px);">
+                            DNA testing in the 1990s proved Primitivo and Zinfandel are the <strong>same grape</strong>. Both trace to <strong>Crljenak Ka&scaron;telanski</strong>, a Croatian variety. Same DNA, different continents, completely different wines.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 24: Primitivo History - The Mystery -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>The Grape with Three Names</h2>
+            <p style="margin-bottom: 25px;">Primitivo's history is a detective story spanning three continents and centuries of mystery.</p>
+            <div class="timeline-item">
+                <span class="timeline-year">Ancient Roots</span>
+                <span>The grape originates in Croatia as <strong>Crljenak Ka&scaron;telanski</strong> (pronounced "tsurl-YEH-nak kash-teh-LAHN-skee"). It crosses the Adriatic Sea to Italy's Puglia, likely brought by monks or maritime traders.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1700s</span>
+                <span>Italian priest Don Francesco Filippo Indellicati <span class="ph">(in-del-ee-KAH-tee)</span> notices this grape ripens earlier than others. He names it <strong>Primitivo</strong> <span class="ph">(pree-mee-TEE-vo)</span>&mdash;from Latin <em>primativus</em> <span class="ph">(pree-mah-TEE-voos)</span>, "first to ripen." Not "primitive" in the English sense.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1820s</span>
+                <span>The grape arrives in America (likely via Austrian botanical collections) and is planted in California. Americans call it <strong>Zinfandel</strong>&mdash;origin of that name remains debated.</span>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1994&ndash;2001</span>
+                <span>UC Davis professor Carole Meredith uses DNA fingerprinting to prove Zinfandel = Primitivo = Crljenak Ka&scaron;telanski. One of the great wine mysteries, solved by genetics.</span>
+            </div>
+            <div class="talking-point">This is a crowd-pleaser story. "How many of you like Zinfandel? You're about to taste the same grape&mdash;but grown in Italy, in a completely different climate, by Italian winemakers. Same DNA, different expression. Like identical twins raised in different countries."</div>
+        </div>
+
+        <!-- SLIDE 25: Puglia & Italian Primitivo Character -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Puglia: Italy's Sun-Drenched South</h2>
+            <div class="two-col">
+                <div>
+                    <h3 style="margin-top: 0;">The Region</h3>
+                    <p><strong>Puglia</strong> <span class="ph">(POOL-yah)</span> (also called "Apulia" <span class="ph">(ah-POOL-yah)</span>) is the heel of Italy's boot, stretching into the Mediterranean. It's one of Italy's sunniest, warmest regions&mdash;flat, arid, and sun-baked.</p>
+                    <p>For decades, Puglia was Italy's bulk wine factory&mdash;quantity over quality. Tanker trucks of anonymous red were shipped north to "improve" thinner wines from cooler regions.</p>
+                    <p>Since the 1990s, a quality revolution has transformed Puglia. Winemakers discovered that old-vine Primitivo&mdash;some vines 80+ years old&mdash;produces wines of incredible depth and concentration.</p>
+                </div>
+                <div>
+                    <h3 style="margin-top: 0;">Primitivo vs. Zinfandel</h3>
+                    <ul>
+                        <li><strong>Italian Primitivo:</strong> Tends toward dried fruit, fig, chocolate, earthiness. More rustic and Mediterranean.</li>
+                        <li><strong>California Zinfandel:</strong> Tends toward jammy fresh fruit, bold spice, higher alcohol. More exuberant and "sunny."</li>
+                    </ul>
+                    <p>The difference is terroir and winemaking philosophy. Italian Primitivo is restrained by tradition; California Zinfandel is amplified by ambition.</p>
+                    <div class="highlight-box" style="margin-top: 15px;">
+                        <p style="margin-bottom: 0;"><strong>High Alcohol Warning:</strong> Primitivo naturally produces high sugar levels, which means high alcohol&mdash;often 14&ndash;15%+. This creates the "warming" sensation in the finish. That's the alcohol, not spice (though spice is there too).</p>
+                    </div>
+                </div>
+            </div>
+            <div class="talking-point">Pour the Primitivo last. Ask everyone to compare the color side-by-side with the Pinot Noir. The Primitivo should be dramatically darker and more opaque&mdash;thick skins = deep color. This is the skin contact lesson in action.</div>
+        </div>
+
+        <!-- SLIDE 26: Primitivo Tasting Notes -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Primitivo: Tasting Notes</h2>
+            <div class="tasting-box">
+                <h4>Appearance</h4>
+                <p>Deep garnet to inky purple&mdash;opaque and intense; you cannot see through it. Dramatic contrast to the translucent Pinot Noir.</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Nose</h4>
+                <p>Ripe blackberry, plum jam, dried fig, black pepper, vanilla, cocoa, and a hint of leather</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Palate</h4>
+                <p>Full-bodied and velvety, rich dark fruit, baking spices (cinnamon, clove), smooth tannins, warming alcohol</p>
+            </div>
+            <div class="tasting-box">
+                <h4>Finish</h4>
+                <p>Long and warming with lingering dark fruit, chocolate, gentle spice, and a touch of dried herb</p>
+            </div>
+            <p style="margin-top: 20px; color: var(--text-muted);">
+                <strong>Pairing Ideas:</strong> BBQ ribs, lamb shank, aged pecorino <span class="ph">(peh-koh-REE-no) &mdash; sheep's milk cheese</span>, wood-fired pizza with sausage, dark chocolate, hearty ragout <span class="ph">(ra-GOO) &mdash; thick stew</span>
+            </p>
+            <div class="talking-point">Ask: "What's the biggest difference you feel between this and the Pinot Noir?" Most will say weight/body. The Primitivo should feel like a warm hug while the Pinot felt like silk. Both are red wine&mdash;but completely different experiences.</div>
+        </div>
+
+        <!-- SLIDE 27: Side-by-Side Comparison -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Quick Comparison</h2>
+            <div class="comparison-grid">
+                <div class="comparison-card">
+                    <h4>Sauvignon Blanc <span style="font-weight: 400; opacity: 0.7;">NZ</span></h4>
+                    <p><strong>Style:</strong> Crisp, aromatic, electric</p>
+                    <p><strong>Body:</strong> Light</p>
+                    <p><strong>Key Flavor:</strong> Passion fruit &amp; lime</p>
+                    <p><strong>Best for:</strong> Seafood &amp; fresh salads</p>
+                </div>
+                <div class="comparison-card">
+                    <h4>Chardonnay <span style="font-weight: 400; opacity: 0.7;">Italy</span></h4>
+                    <p><strong>Style:</strong> Elegant, balanced, versatile</p>
+                    <p><strong>Body:</strong> Medium</p>
+                    <p><strong>Key Flavor:</strong> Lemon &amp; white peach</p>
+                    <p><strong>Best for:</strong> Poultry &amp; creamy dishes</p>
+                </div>
+                <div class="comparison-card">
+                    <h4>Pinot Noir <span style="font-weight: 400; opacity: 0.7;">Monterey</span></h4>
+                    <p><strong>Style:</strong> Silky, fruity, earthy</p>
+                    <p><strong>Body:</strong> Light-medium</p>
+                    <p><strong>Key Flavor:</strong> Red cherry &amp; raspberry</p>
+                    <p><strong>Best for:</strong> Salmon &amp; mushrooms</p>
+                </div>
+                <div class="comparison-card">
+                    <h4>Primitivo <span style="font-weight: 400; opacity: 0.7;">Italy</span></h4>
+                    <p><strong>Style:</strong> Bold, jammy, warming</p>
+                    <p><strong>Body:</strong> Full</p>
+                    <p><strong>Key Flavor:</strong> Blackberry &amp; plum</p>
+                    <p><strong>Best for:</strong> BBQ &amp; aged cheese</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 28: Key Takeaways -->
+        <div class="slide">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h2>Key Takeaways</h2>
+            <ul style="margin-top: 30px;">
+                <li><strong>Wine is ancient:</strong> Over 8,000 years of history in every glass&mdash;older than the wheel</li>
+                <li><strong>Color comes from skin contact:</strong> All grape juice is essentially clear; time on skins determines color</li>
+                <li><strong>Grapes have families:</strong> Pinot Noir is Chardonnay's parent; Sauvignon Blanc gave birth to Cabernet Sauvignon</li>
+                <li><strong>Same grape, different wine:</strong> Primitivo and Zinfandel share identical DNA but express completely differently</li>
+                <li><strong>Old World vs. New World:</strong> Tradition and terroir versus innovation and fruit&mdash;tonight you tasted both</li>
+                <li><strong>The winemaker matters:</strong> Oak vs. steel, skin contact time, aging&mdash;every choice shapes the final wine</li>
+                <li><strong>Trust your palate:</strong> There are no wrong answers&mdash;if you enjoy it, it's a good wine</li>
+            </ul>
+        </div>
+
+        <!-- SLIDE 29: Thank You -->
+        <div class="slide center-content">
+            <div class="corner-decor top-left"></div>
+            <div class="corner-decor top-right"></div>
+            <div class="corner-decor bottom-left"></div>
+            <div class="corner-decor bottom-right"></div>
+            <h1 style="font-size: clamp(48px, 6vw, 72px); margin-bottom: 30px;">Thank You</h1>
+            <p style="font-size: clamp(20px, 2.5vw, 32px); margin-bottom: 50px;">We hope you enjoyed this wine tasting journey</p>
+            <div class="brand-name">Wandering Spirits</div>
+            <p class="subtitle">Mobile Bar</p>
+            <p style="font-size: clamp(18px, 2vw, 26px); margin: 30px 0; color: var(--text-muted);">Serving Ventura County &amp; Los Angeles</p>
+            <p class="website" style="font-size: clamp(20px, 2vw, 28px); color: var(--accent-burgundy);">wanderingspiritsmb.com</p>
+            <p style="margin-top: 20px; color: var(--text-muted);">(805) 885-8863</p>
+        </div>
+
+    </div>
+
+    <div class="swipe-hint" id="swipeHint">&larr; Swipe or tap edges to navigate &rarr;</div>
+
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="changeSlide(-1)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="slide-counter">
+            <span class="current" id="currentSlide">1</span> / <span id="totalSlides"></span>
+        </div>
+        <button class="nav-btn" id="nextBtn" onclick="changeSlide(1)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) slide.classList.add('active');
+            });
+            document.getElementById('currentSlide').textContent = index + 1;
+            document.getElementById('progressBar').style.width = ((index + 1) / totalSlides * 100) + '%';
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').disabled = index === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+            showSlide(currentSlide);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); changeSlide(1); }
+            else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); changeSlide(-1); }
+            else if (e.key === 'Home') { e.preventDefault(); currentSlide = 0; showSlide(currentSlide); }
+            else if (e.key === 'End') { e.preventDefault(); currentSlide = totalSlides - 1; showSlide(currentSlide); }
+        });
+
+        const slidesContainer = document.getElementById('slidesContainer');
+        let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
+
+        slidesContainer.addEventListener('touchstart', function(e) {
+            touchStartX = e.touches[0].pageX;
+            touchStartY = e.touches[0].pageY;
+            touchStartTime = Date.now();
+        }, { passive: true });
+
+        slidesContainer.addEventListener('touchend', function(e) {
+            const touchEndX = e.changedTouches[0].pageX;
+            const touchEndY = e.changedTouches[0].pageY;
+            const diffX = touchStartX - touchEndX;
+            const diffY = touchStartY - touchEndY;
+            const duration = Date.now() - touchStartTime;
+
+            if (Math.abs(diffX) > 50 && Math.abs(diffX) > Math.abs(diffY)) {
+                changeSlide(diffX > 0 ? 1 : -1);
+            } else if (duration < 300 && Math.abs(diffX) < 15 && Math.abs(diffY) < 15) {
+                const rect = slidesContainer.getBoundingClientRect();
+                const tapX = touchEndX - rect.left;
+                const width = rect.width;
+                if (tapX > width * 0.65) changeSlide(1);
+                else if (tapX < width * 0.35) changeSlide(-1);
+            }
+        }, { passive: true });
+
+        slidesContainer.addEventListener('click', function(e) {
+            if ('ontouchstart' in window) return;
+            const rect = e.currentTarget.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            if (clickX > width * 0.65) changeSlide(1);
+            else if (clickX < width * 0.35) changeSlide(-1);
+        });
+
+        let hintHidden = false;
+        const origChange = changeSlide;
+        changeSlide = function(d) {
+            if (!hintHidden) { document.getElementById('swipeHint').style.display = 'none'; hintHidden = true; }
+            origChange(d);
+        };
+
+        showSlide(0);
+    </script>
+</body>
+</html>
