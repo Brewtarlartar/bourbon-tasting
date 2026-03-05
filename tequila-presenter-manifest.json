@@ -1,0 +1,25 @@
+{
+  "name": "Tequila Tasting — Presenter",
+  "short_name": "Tequila Presenter",
+  "description": "Presenter Deck for the Tequila Tasting Experience",
+  "start_url": "./tequila-presenter.html",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#0d0b08",
+  "theme_color": "#0d0b08",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23C6862A'/><text x='96' y='130' font-size='100' text-anchor='middle' font-family='serif' fill='%23f5f0e8'>🥃</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23C6862A'/><text x='256' y='340' font-size='260' text-anchor='middle' font-family='serif' fill='%23f5f0e8'>🥃</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
