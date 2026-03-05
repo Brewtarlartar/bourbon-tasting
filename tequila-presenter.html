@@ -66,6 +66,8 @@
 
         .slide.active { display: flex; opacity: 1; }
 
+        .slide > * { flex-shrink: 0; }
+
         .slide::before {
             content: '';
             position: absolute;
@@ -509,7 +511,14 @@
                 padding: 20px 20px 150px 20px;
                 padding-top: calc(20px + env(safe-area-inset-top, 0px));
                 padding-bottom: calc(150px + env(safe-area-inset-bottom, 0px));
-                justify-content: flex-start;
+            }
+            .slide.active {
+                display: block !important;
+                opacity: 1;
+            }
+            .slide.center-content {
+                text-align: center;
+                padding-top: calc(80px + env(safe-area-inset-top, 0px));
             }
             h1 { font-size: 32px !important; letter-spacing: 1px; }
             h2 { font-size: 24px !important; margin-bottom: 20px; }
